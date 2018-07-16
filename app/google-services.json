@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "613134618123",
+    "firebase_url": "https://momafan-407bf.firebaseio.com",
+    "project_id": "momafan-407bf",
+    "storage_bucket": "momafan-407bf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:613134618123:android:ae22cabac69a3c35",
+        "android_client_info": {
+          "package_name": "com.pff.momafan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "613134618123-sm5dv3f91ti9rvnk988t2ome6irp1193.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pff.momafan",
+            "certificate_hash": "a319aaf5473789792823562e42a6e46c56e5c364"
+          }
+        },
+        {
+          "client_id": "613134618123-b1vl37plnlra9pm5qqvhe6pio8an92kh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBefNap7zTQhe8j7oL_2btvZTDnseHXruM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "613134618123-b1vl37plnlra9pm5qqvhe6pio8an92kh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
