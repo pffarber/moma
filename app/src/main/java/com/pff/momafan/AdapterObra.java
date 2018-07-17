@@ -1,5 +1,6 @@
 package com.pff.momafan;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FileDownloadTask;
@@ -25,7 +27,6 @@ public class AdapterObra extends RecyclerView.Adapter {
 
     private List<Obra> listadoDeObras;
     private NotificadorObraCelda notificadorObraCelda;
-
 
     public AdapterObra(List<Obra> obras) {
         listadoDeObras = obras;
@@ -55,8 +56,11 @@ public class AdapterObra extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         Obra obra = listadoDeObras.get(position);
+
+        //??
         ObrasViewHolder obrasViewHolder = (ObrasViewHolder) holder;
         obrasViewHolder.cargarObra(obra);
+
 
     }
 
@@ -95,43 +99,33 @@ public class AdapterObra extends RecyclerView.Adapter {
 
         public void cargarObra(Obra obra) {
             textViewNombre.setText(obra.getNombre());
+            if (TextUtils.isEmpty(obra.getImagenUrl())) {
+                return;
+            }
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference reference = storage.getReference();
+            reference = reference.child(obra.getImagenUrl());
+            try {
+                final File archivo = File.createTempFile("imagenandroid", "jpg");
+                final StorageReference finalReference = reference;
+                reference.getFile(archivo).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
 
+                        Glide.with(itemView.getContext())
+                                .using(new FirebaseImageLoader())
+                                .load(finalReference)
+                                .override(500, 500)
+                                .fitCenter()
+                                .into(imageViewObra);
+                    }
+                });
+            } catch (Exception e) {
 
+            }
         }
+
     }
-
-
-    /*private void cargarImagenDescargadaDelStorage(String imagePath) {
-        if(TextUtils.isEmpty(imagePath)){
-            return;
-        }
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference reference = storage.getReference();
-        reference = reference.child(imagePath);
-        //opcion 1
-
-        try {
-            final File archivo = File.createTempFile("fotoandroid", "jpg");
-            reference.getFile(archivo).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-
-                    Picasso.get().load(archivo.getAbsoluteFile()).into(imagenContacto);
-                }
-            });
-        } catch (Exception e) {
-
-        }
-        //opcion 2 esto lo pueden usar en el onBind del adapter de un recycler para cargar las imagenes de las pinturas del entregable
-        //para usar esto deben importar la libreria en el gradle:     implementation 'com.firebaseui:firebase-ui-storage:0.6.0'
-/*
-        Glide.with(this)
-                .using(new FirebaseImageLoader())
-                .load(reference)
-                .into(imagenContacto);
-    }*/
-
-
     public interface NotificadorObraCelda {
         public void notificarObraClickeada(Obra obra);
     }

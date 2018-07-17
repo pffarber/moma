@@ -10,6 +10,7 @@ public class Obra implements Serializable {
         @SerializedName("name")
         private String nombre;
 
+        @SerializedName("image")
         private String imagenUrl;
 
         @SerializedName("artistId")
@@ -56,7 +57,8 @@ public class Obra implements Serializable {
                 return false;
             }
             Obra obraAComparar = (Obra) obj;
-            return (obraAComparar.getNombre().equals(this.nombre));
+            return (obraAComparar.getNombre().equals(this.nombre)&&
+                    (obraAComparar.getIdArtista().equals(this.idArtista)));
         }
 
     }
