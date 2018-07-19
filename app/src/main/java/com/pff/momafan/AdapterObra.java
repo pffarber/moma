@@ -105,26 +105,13 @@ public class AdapterObra extends RecyclerView.Adapter {
             FirebaseStorage storage = FirebaseStorage.getInstance();
             StorageReference reference = storage.getReference();
             reference = reference.child(obra.getImagenUrl());
-            try {
-                final File archivo = File.createTempFile("imagenandroid", "jpg");
-                final StorageReference finalReference = reference;
-                reference.getFile(archivo).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-
-                        Glide.with(itemView.getContext())
+            Glide.with(itemView.getContext())
                                 .using(new FirebaseImageLoader())
-                                .load(finalReference)
+                                .load(reference)
                                 .override(500, 500)
                                 .fitCenter()
                                 .into(imageViewObra);
-                    }
-                });
-            } catch (Exception e) {
-
-            }
         }
-
     }
     public interface NotificadorObraCelda {
         public void notificarObraClickeada(Obra obra);

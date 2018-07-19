@@ -14,13 +14,13 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
-import com.google.android.gms.tasks.OnSuccessListener;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FileDownloadTask;
+
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.pff.momafan.model.pojo.Artista;
@@ -36,8 +36,7 @@ public class DetalleObraFragment extends Fragment {
 
     public static final String OBRA_CLAVE = "Obra_clave";
     public static final String ARTISTAS = "artists";
-    private static final String FOTOS_ROOT_STORAGE = "/artistpaints";
-    public static final String IDARTISTA = "artistId";
+
 
     FirebaseDatabase database;
     TextView tv_artistName;
@@ -65,14 +64,14 @@ public class DetalleObraFragment extends Fragment {
         Obra obra = (Obra) bundle.getSerializable(OBRA_CLAVE);
         database = FirebaseDatabase.getInstance();
         traerArtistaPorId(obra.getIdArtista());
-        traerImagenObra(obra.getImagenUrl());
+        traerImagenObraStorage(obra.getImagenUrl());
         tv_nombre.setText(obra.getNombre());
 
         return view;
     }
 
     private void traerArtistaPorId(final String id) {
-        //DatabaseReference reference = database.getReference().child(ARTISTAS).child(id);
+
         DatabaseReference reference = database.getReference().child(ARTISTAS);
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -104,7 +103,7 @@ public class DetalleObraFragment extends Fragment {
     }
 
 
-    public void traerImagenObra(String imagePath) {
+    public void traerImagenObraStorage(String imagePath) {
         if (TextUtils.isEmpty(imagePath)) {
             return;
         }
@@ -112,20 +111,11 @@ public class DetalleObraFragment extends Fragment {
         StorageReference reference = storage.getReference();
         reference = reference.child(imagePath);
         try {
-            final File archivo = File.createTempFile("imagenandroid", "jpg");
-            final StorageReference finalReference = reference;
-            reference.getFile(archivo).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-
-                    Glide.with(getContext())
+            Glide.with(this)
                             .using(new FirebaseImageLoader())
-                            .load(finalReference)
-                            .override(500,500)
-                            .fitCenter()
+                            .load(reference)
                             .into(iv_obra);
-                }
-            });
+
         } catch (Exception e) {
 
         }

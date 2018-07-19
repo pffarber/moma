@@ -37,7 +37,6 @@ import java.security.NoSuchAlgorithmException;
 public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-
     private EditText editTextMail;
     private EditText editTextPass;
     private Button botonCrear;
@@ -48,9 +47,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_login);
-
         mAuth = FirebaseAuth.getInstance();
         editTextMail = findViewById(R.id.editTextEmail);
         editTextPass = findViewById(R.id.editTextPass);
@@ -59,34 +56,43 @@ public class LoginActivity extends AppCompatActivity {
         botonLogin.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                loginUsuario(editTextMail.getText().toString(), editTextPass.getText().toString());
+                String emailACargar = editTextMail.getText().toString();
+                String passwrdACargar = editTextPass.getText().toString();
+                if(emailACargar.isEmpty()) {
+                    editTextMail.setError("Provide your Email please");
+                    editTextMail.requestFocus();
+                } else if(passwrdACargar.isEmpty()) {
+                    editTextPass.setError("Provide your password please");
+                    editTextPass.requestFocus();
+                } else if (emailACargar.isEmpty() && passwrdACargar.isEmpty()) {
+                    Toast.makeText(LoginActivity.this, "Please complete empty fields", Toast.LENGTH_LONG).show();
+                } else if (!(emailACargar.isEmpty() && passwrdACargar.isEmpty())) {
+                    loginUsuario(emailACargar, passwrdACargar);
+                }
             }
-
         });
-
         botonCrear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                crearUsuario(editTextMail.getText().toString(),editTextPass.getText().toString());
+                String emailACargar = editTextMail.getText().toString();
+                String passwrdACargar = editTextPass.getText().toString();
+                if(emailACargar.isEmpty()) {
+                    editTextMail.setError("Provide your Email please");
+                    editTextMail.requestFocus();
+                } else if(passwrdACargar.isEmpty()) {
+                    editTextPass.setError("Provide a password please");
+                    editTextPass.requestFocus();
+                } else if (emailACargar.isEmpty() && passwrdACargar.isEmpty()) {
+                    Toast.makeText(LoginActivity.this, "Please complete empty fields", Toast.LENGTH_LONG).show();
+                } else if (!(emailACargar.isEmpty() && passwrdACargar.isEmpty())) {
+                    crearUsuario(emailACargar, passwrdACargar);
+                }
             }
         });
-
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null){
-                    Intent intent = new Intent (LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    Log.d("facebook", "onAuthStateChanged:signed_out");
-
-                } else {
-
-                    Log.d("facebook", "onAuthStateChanged:signed_out");
-                }
-
-            }
-        };
+        if(mAuth.getCurrentUser()!= null){
+            Intent intent = new Intent (LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
 
         mCallbackManager = CallbackManager.Factory.create();
         loginButton = findViewById(R.id.login_button);
@@ -95,6 +101,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess (LoginResult loginResult){
                 handleFacebookAccessToken(loginResult.getAccessToken());
+                Intent intent = new Intent (LoginActivity.this, MainActivity.class);
+                startActivity(intent);
             }
             @Override
             public void onCancel() {
@@ -108,13 +116,9 @@ public class LoginActivity extends AppCompatActivity {
                 // ...
             }
         });
-
-
     }
 
     private void handleFacebookAccessToken(AccessToken token) {
-
-
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -136,28 +140,9 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
     }
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        mAuth.addAuthStateListener(mAuthListener);
-
-
-
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
-    }
-
-    @Override
+       @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         // Pass the activity result back to the Facebook SDK
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
@@ -193,9 +178,10 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
+                            FirebaseUser user = mAuth.getCurrentUser();
                             Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                             startActivity(intent);
-                            FirebaseUser user = mAuth.getCurrentUser();
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
@@ -209,24 +195,6 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void printHash() {
-        try {
-
-            PackageInfo info =
-                    getPackageManager().getPackageInfo(getApplicationContext().getPackageName(),
-                            PackageManager.GET_SIGNATURES);
-
-            for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.v("MY KEY HASH:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-    }
 
 }
 

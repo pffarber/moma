@@ -5,28 +5,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/colorPrimary"
     tools:context=".LoginActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/momafanblack"/>
 
     <EditText
         android:id="@+id/editTextEmail"
         android:hint="email"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        />
     <EditText
         android:id="@+id/editTextPass"
         android:hint="password"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        />
     <Button
         android:text="Crear Cuenta"
         android:id="@+id/BotonCrearUsuario"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        />
     <Button
         android:text="Login"
         android:id="@+id/BotonLogUsuario"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:padding="16dp"/>
 
 
     <com.facebook.login.widget.LoginButton
@@ -35,7 +47,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp" />
+        android:layout_marginBottom="30dp"
+
+        />
 
 
 

@@ -22,7 +22,6 @@ import java.util.List;
  */
 public class ObrasFragment extends Fragment implements AdapterObra.NotificadorObraCelda {
     private RecyclerView recyclerView;
-    private List<Obra> obras;
     private NotificadorObra notificadorObra;
     private AdapterObra adapter;
     private ObraController obraController;
@@ -31,7 +30,6 @@ public class ObrasFragment extends Fragment implements AdapterObra.NotificadorOb
     public ObrasFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,6 +52,7 @@ public class ObrasFragment extends Fragment implements AdapterObra.NotificadorOb
         super.onAttach(context);
         notificadorObra = (NotificadorObra) context;
     }
+
 
     private void obtenerObras() {
         obraController.obtenerObras(new ResultListener<List<Obra>>() {

@@ -22,10 +22,6 @@ public class Artista {
 
     }
 
-
-
-
-
     public String getName() {
         return name;
     }
