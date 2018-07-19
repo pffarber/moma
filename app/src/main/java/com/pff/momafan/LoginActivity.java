@@ -64,9 +64,7 @@ public class LoginActivity extends AppCompatActivity {
                 } else if(passwrdACargar.isEmpty()) {
                     editTextPass.setError("Provide your password please");
                     editTextPass.requestFocus();
-                } else if (emailACargar.isEmpty() && passwrdACargar.isEmpty()) {
-                    Toast.makeText(LoginActivity.this, "Please complete empty fields", Toast.LENGTH_LONG).show();
-                } else if (!(emailACargar.isEmpty() && passwrdACargar.isEmpty())) {
+               } else if (!(emailACargar.isEmpty() && passwrdACargar.isEmpty())) {
                     loginUsuario(emailACargar, passwrdACargar);
                 }
             }
@@ -82,8 +80,6 @@ public class LoginActivity extends AppCompatActivity {
                 } else if(passwrdACargar.isEmpty()) {
                     editTextPass.setError("Provide a password please");
                     editTextPass.requestFocus();
-                } else if (emailACargar.isEmpty() && passwrdACargar.isEmpty()) {
-                    Toast.makeText(LoginActivity.this, "Please complete empty fields", Toast.LENGTH_LONG).show();
                 } else if (!(emailACargar.isEmpty() && passwrdACargar.isEmpty())) {
                     crearUsuario(emailACargar, passwrdACargar);
                 }
