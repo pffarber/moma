@@ -1,24 +1,19 @@
-package com.pff.momafan;
+package com.pff.momafan.view;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
+import com.pff.momafan.R;
 import com.pff.momafan.model.pojo.Obra;
 
 public class MainActivity extends AppCompatActivity implements ObrasFragment.NotificadorObra{
@@ -64,12 +59,13 @@ public class MainActivity extends AppCompatActivity implements ObrasFragment.Not
     private void cargarFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.addToBackStack(null);
+        //fragmentTransaction.addToBackStack(null);
         fragmentTransaction.replace(R.id.fragment_container, fragment).commit();
     }
 
     @Override
-    public void notificar(Obra obra) {
+
+   public void notificar(Obra obra) {
         DetalleObraFragment detalleObraFragment = new DetalleObraFragment();
         Bundle unBundle = new Bundle();
         unBundle.putSerializable(DetalleObraFragment.OBRA_CLAVE, obra);

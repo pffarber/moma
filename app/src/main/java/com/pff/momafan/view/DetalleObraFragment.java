@@ -1,7 +1,6 @@
-package com.pff.momafan;
+package com.pff.momafan.view;
 
 
-import android.database.DatabaseUtils;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -23,10 +22,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.pff.momafan.R;
+import com.pff.momafan.controller.ArtistaControllerDatabase;
 import com.pff.momafan.model.pojo.Artista;
 import com.pff.momafan.model.pojo.Obra;
-
-import java.io.File;
+import com.pff.momafan.utils.ResultListener;
 
 
 /**
@@ -36,9 +36,10 @@ public class DetalleObraFragment extends Fragment {
 
     public static final String OBRA_CLAVE = "Obra_clave";
     public static final String ARTISTAS = "artists";
+    private ArtistaControllerDatabase artistaControllerDatabase;
 
 
-    FirebaseDatabase database;
+
     TextView tv_artistName;
     TextView tv_artistNationality;
     TextView tv_influenced;
@@ -62,45 +63,35 @@ public class DetalleObraFragment extends Fragment {
         iv_obra = view.findViewById(R.id.iv_imagen_id);
         Bundle bundle = getArguments();
         Obra obra = (Obra) bundle.getSerializable(OBRA_CLAVE);
-        database = FirebaseDatabase.getInstance();
-        traerArtistaPorId(obra.getIdArtista());
+
+        artistaControllerDatabase = new ArtistaControllerDatabase();
+        obtenerDatosArtistaDatabase(obra.getIdArtista());
+
         traerImagenObraStorage(obra.getImagenUrl());
         tv_nombre.setText(obra.getNombre());
 
         return view;
     }
 
-    private void traerArtistaPorId(final String id) {
 
-        DatabaseReference reference = database.getReference().child(ARTISTAS);
-        reference.addValueEventListener(new ValueEventListener() {
+    //pedimos al controller por los datos del artista, le pasamos el id y el listener,
+    // cuando vuelva agregamos los datos del artista que devolvió
+    private void obtenerDatosArtistaDatabase(String id) {
+        artistaControllerDatabase.obtenerDatosArtistaDatabase
+                (id, new ResultListener<Artista>() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-
-                if (dataSnapshot.exists()) {
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        Artista artista = snapshot.getValue(Artista.class);
-                        if (artista.getArtist_id().equals(id)) {
-                            tv_artistName.setText(artista.getName());
-                            tv_artistNationality.setText(artista.getNationality());
-                            tv_influenced.setText("Influenced by: " + artista.getInfluenced_by());
-                            break;
-                        }
-                    }
-                } else {
-                    Toast.makeText(getActivity(), "Artista inexistente", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Toast.makeText(getActivity(), "Fallo", Toast.LENGTH_SHORT).show();
+            public void finish(Artista artista) {
+                agregarDatos(artista);
             }
         });
     }
+
+    public void agregarDatos(Artista artista){
+
+        tv_artistName.setText(artista.getName());
+        tv_artistNationality.setText(artista.getNationality());
+        tv_influenced.setText("Influenced by: " + artista.getInfluenced_by());
+        }
 
 
     public void traerImagenObraStorage(String imagePath) {

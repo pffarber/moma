@@ -1,4 +1,4 @@
-package com.pff.momafan;
+package com.pff.momafan.view;
 
 
 import android.content.Context;
@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.pff.momafan.R;
 import com.pff.momafan.controller.ObraController;
 import com.pff.momafan.model.pojo.Obra;
 import com.pff.momafan.utils.ResultListener;

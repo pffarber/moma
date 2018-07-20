@@ -1,4 +1,4 @@
-package com.pff.momafan;
+package com.pff.momafan.view;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.pff.momafan.R;
 import com.pff.momafan.model.pojo.Obra;
 import com.squareup.picasso.Picasso;
 
